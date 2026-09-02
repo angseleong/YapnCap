@@ -67,20 +67,20 @@ Use this file as the primary work guide. **Do not start the next phase before th
 
 ## Phase 4 — Fact-Check Engine
 
-- [ ] Implement base `fact_check()` function signature
-- [ ] Implement Gemini provider with Search Grounding
-  - [ ] Craft system prompt for claim extraction + verification
-  - [ ] Use structured output (JSON mode) for reliable parsing
-  - [ ] Handle Gemini-specific errors (quota, safety filters)
-- [ ] Implement OpenAI provider
-  - [ ] Adapt prompt for OpenAI's API format
-  - [ ] Handle OpenAI-specific errors
-- [ ] Implement Groq provider
-  - [ ] Adapt prompt for Groq's API format
-  - [ ] Handle Groq-specific errors
-- [ ] Implement intensity-based prompt adjustment (lenient / balanced / strict)
-- [ ] Return `list[ClaimResult]` with structured data
-- [ ] Test: send sample transcript text → receive structured fact-check results from each provider
+- [x] Implement base `fact_check()` function signature
+- [x] Implement Gemini provider with Search Grounding
+  - [x] Craft system prompt for claim extraction + verification
+  - [x] Use structured output (JSON mode) for reliable parsing
+  - [x] Handle Gemini-specific errors (quota, safety filters)
+- [x] Implement OpenAI provider
+  - [x] Adapt prompt for OpenAI's API format
+  - [x] Handle OpenAI-specific errors
+- [x] Implement Groq provider
+  - [x] Adapt prompt for Groq's API format
+  - [x] Handle Groq-specific errors
+- [x] Implement intensity-based prompt adjustment (lenient / balanced / strict)
+- [x] Return `list[ClaimResult]` with structured data
+- [x] Test: send sample transcript text → receive structured fact-check results from each provider
 
 **Checkpoint Phase 4:** Running `yapncap <url>` with each provider returns a `list[ClaimResult]` with valid verdicts (NO CAP / CAP / YAPPIN) and explanations.
 

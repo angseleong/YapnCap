@@ -3,6 +3,7 @@ from rich.console import Console
 from rich.prompt import Prompt, IntPrompt
 from yapncap.config import YapnCapConfig, load_config, save_config, validate_config
 from yapncap.extractor import get_transcript
+from yapncap.engine import fact_check
 import sys
 
 app = typer.Typer(help="YapnCap 🧢 — Detect if they are just yappin' and cappin' in real-time.")
@@ -77,6 +78,15 @@ def check(
         
         console.print("[bold]Transcript Preview:[/bold]")
         console.print(result.text[:500] + "...\n[dim](truncated)[/dim]" if len(result.text) > 500 else result.text)
+        
+        console.print(f"\n[bold]Fact-checking with {config.provider.capitalize()} ({config.intensity})...[/bold]")
+        claims = fact_check(result.text, config)
+        
+        for c in claims:
+            color = "green" if c.verdict == "NO CAP" else "red" if c.verdict == "CAP" else "yellow"
+            console.print(f"\n[{color}][{c.verdict}][/{color}] {c.time_start} - {c.time_end} | {c.claim}")
+            console.print(f"  [dim]-> {c.correction}[/dim]")
+            console.print(f"  [cyan]Source: {c.source}[/cyan]")
         
     except Exception as e:
         console.print(f"[bold red]Error extracting video:[/bold red] {str(e)}")
