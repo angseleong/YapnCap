@@ -2,6 +2,7 @@ import typer
 from rich.console import Console
 from rich.prompt import Prompt, IntPrompt
 from yapncap.config import YapnCapConfig, load_config, save_config, validate_config
+from yapncap.extractor import get_transcript
 import sys
 
 app = typer.Typer(help="YapnCap 🧢 — Detect if they are just yappin' and cappin' in real-time.")
@@ -64,8 +65,22 @@ def check(
         console.print("Please run [bold cyan]yapncap setup[/bold cyan] first, or set the appropriate environment variable (e.g. GEMINI_API_KEY).")
         sys.exit(1)
         
-    console.print(f"Fact-checking [bold cyan]{url}[/bold cyan] using {config.provider.capitalize()} ({config.intensity} mode)...")
-    # TODO: Implement fact-checking pipeline
+    console.print(f"Extracting transcript from [bold cyan]{url}[/bold cyan]...")
+    try:
+        result = get_transcript(url, config.language)
+        
+        console.print("\n[bold]Video Metadata:[/bold]")
+        console.print(f"Title:    {result.title}")
+        console.print(f"Channel:  {result.channel}")
+        console.print(f"Duration: {result.duration}")
+        console.print(f"Source:   {result.source.upper()} ({result.language})\n")
+        
+        console.print("[bold]Transcript Preview:[/bold]")
+        console.print(result.text[:500] + "...\n[dim](truncated)[/dim]" if len(result.text) > 500 else result.text)
+        
+    except Exception as e:
+        console.print(f"[bold red]Error extracting video:[/bold red] {str(e)}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     app()

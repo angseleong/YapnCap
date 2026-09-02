@@ -25,15 +25,15 @@ Use this file as the primary work guide. **Do not start the next phase before th
 
 ## Phase 1 — Interactive Setup (`yapncap setup`)
 
-- [ ] Implement `yapncap setup` command with `rich.prompt` interactive wizard:
-  - [ ] Language selection (`en` / `id`)
-  - [ ] AI Provider selection (`gemini` (recommended) / `openai` / `groq`)
-  - [ ] API Key input (masked/secure prompt)
-  - [ ] Intensity selection (`lenient` / `balanced` / `strict`)
-- [ ] Save config to `~/.yapncap/config.json`
-- [ ] Implement config validation on load — detect missing/corrupt fields
-- [ ] Implement env var overrides (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `GROQ_API_KEY`, etc.)
-- [ ] Test: run `yapncap setup`, verify config file is created with correct values
+- [x] Implement `yapncap setup` command with `rich.prompt` interactive wizard:
+  - [x] Language selection (`en` / `id`)
+  - [x] AI Provider selection (`gemini` (recommended) / `openai` / `groq`)
+  - [x] API Key input (masked/secure prompt)
+  - [x] Intensity selection (`lenient` / `balanced` / `strict`)
+- [x] Save config to `~/.yapncap/config.json`
+- [x] Implement config validation on load — detect missing/corrupt fields
+- [x] Implement env var overrides (`GEMINI_API_KEY`, `OPENAI_API_KEY`, `GROQ_API_KEY`, etc.)
+- [x] Test: run `yapncap setup`, verify config file is created with correct values
 
 **Checkpoint Phase 1:** `yapncap setup` creates a valid `~/.yapncap/config.json`. Loading the config in Python returns all expected fields.
 
@@ -41,13 +41,13 @@ Use this file as the primary work guide. **Do not start the next phase before th
 
 ## Phase 2 — YouTube Transcript Extractor
 
-- [ ] Implement YouTube URL validation (extract video ID from various URL formats)
-- [ ] Implement CC extraction using `youtube-transcript-api`
-  - [ ] Try configured language first, fall back to available languages
-  - [ ] Handle `TranscriptsDisabled`, `NoTranscriptFound` errors gracefully
-- [ ] Extract video metadata (title, channel, duration) using `yt-dlp` metadata extraction (no download)
-- [ ] Return `TranscriptResult` dataclass with all fields populated
-- [ ] Test: run with a YouTube URL that has CC — transcript text is returned
+- [x] Implement YouTube URL validation (extract video ID from various URL formats)
+- [x] Implement CC extraction using `youtube-transcript-api`
+  - [x] Try configured language first, fall back to available languages
+  - [x] Handle `TranscriptsDisabled`, `NoTranscriptFound` errors gracefully
+- [x] Extract video metadata (title, channel, duration) using `yt-dlp` metadata extraction (no download)
+- [x] Return `TranscriptResult` dataclass with all fields populated
+- [x] Test: run with a YouTube URL that has CC — transcript text is returned
 
 **Checkpoint Phase 2:** `yapncap <youtube-url-with-cc>` extracts transcript text and prints it to terminal (raw text, no fact-checking yet).
 
