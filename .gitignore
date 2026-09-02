@@ -1,0 +1,19 @@
+# Virtual Environments
+.venv/
+venv/
+.env/
+env/
+
+# Environment Variables
+.env
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+
+# Mac OS
+.DS_Store

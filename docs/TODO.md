@@ -125,18 +125,12 @@ Use this file as the primary work guide. **Do not start the next phase before th
 - [ ] Streaming fact-check results as claims are detected
 - [ ] Terminal UI with live-updating table
 
-### Phase 8 — Web Dashboard
-- [ ] Simple web UI (FastAPI/Flask + HTMX or Next.js)
-- [ ] Paste URL → see results in browser
-- [ ] History of past fact-checks
-- [ ] Share results via URL
-
-### Phase 9 — Batch Processing
+### Phase 8 — Batch Processing
 - [ ] Accept multiple URLs in one command
 - [ ] Parallel processing with progress tracking
 - [ ] Combined report output
 
-### Phase 10 — Platform Expansion
+### Phase 9 — Platform Expansion
 - [ ] Support Spotify podcast URLs
 - [ ] Support direct audio file input (`.mp3`, `.wav`, `.m4a`)
 - [ ] Support Apple Podcasts URLs
