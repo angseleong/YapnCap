@@ -88,14 +88,14 @@ Use this file as the primary work guide. **Do not start the next phase before th
 
 ## Phase 5 — Rich Terminal Output
 
-- [ ] Implement header panel (video title, channel, URL, duration, transcript source)
-- [ ] Implement animated progress bar during AI processing
-- [ ] Implement result table with color-coded verdict badges:
-  - [ ] 🟢 `[NO CAP]` — green
-  - [ ] 🔴 `[CAP!]` — red
-  - [ ] 🟡 `[YAPPIN!]` — yellow
-- [ ] Implement summary footer (total claims, % breakdown by verdict)
-- [ ] Test: full pipeline produces beautiful, readable terminal output
+- [x] Implement header panel (video title, channel, URL, duration, transcript source)
+- [x] Implement animated progress bar during AI processing
+- [x] Implement result table with color-coded verdict badges:
+  - [x] 🟢 `[NO CAP]` — green
+  - [x] 🔴 `[CAP!]` — red
+  - [x] 🟡 `[YAPPIN!]` — yellow
+- [x] Implement summary footer (total claims, % breakdown by verdict)
+- [x] Test: full pipeline produces beautiful, readable terminal output
 
 **Checkpoint Phase 5:** `yapncap <url>` produces a complete, styled terminal report. Visual inspection confirms colors, layout, and formatting are correct.
 

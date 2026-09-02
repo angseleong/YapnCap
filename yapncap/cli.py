@@ -1,6 +1,11 @@
 import typer
 from rich.console import Console
 from rich.prompt import Prompt, IntPrompt
+from rich.panel import Panel
+from rich.table import Table
+from rich.status import Status
+from rich.text import Text
+from rich import box
 from yapncap.config import YapnCapConfig, load_config, save_config, validate_config
 from yapncap.extractor import get_transcript
 from yapncap.engine import fact_check
@@ -70,23 +75,64 @@ def check(
     try:
         result = get_transcript(url, config.language)
         
-        console.print("\n[bold]Video Metadata:[/bold]")
-        console.print(f"Title:    {result.title}")
-        console.print(f"Channel:  {result.channel}")
-        console.print(f"Duration: {result.duration}")
-        console.print(f"Source:   {result.source.upper()} ({result.language})\n")
+        # --- Phase 5: Header Panel ---
+        metadata_text = (
+            f"[bold]Title:[/bold]    {result.title}\n"
+            f"[bold]Channel:[/bold]  {result.channel}\n"
+            f"[bold]Duration:[/bold] {result.duration}\n"
+            f"[bold]Source:[/bold]   {result.source.upper()}"
+        )
+        console.print(Panel(metadata_text, title="[bold blue]Video Info[/bold blue]", border_style="blue", expand=False))
         
-        console.print("[bold]Transcript Preview:[/bold]")
-        console.print(result.text[:500] + "...\n[dim](truncated)[/dim]" if len(result.text) > 500 else result.text)
+        # --- Phase 5: Processing Animation ---
+        with Status(f"[bold yellow]Fact-checking with {config.provider.capitalize()} ({config.intensity})...[/bold yellow]", spinner="dots"):
+            claims = fact_check(result.text, config)
         
-        console.print(f"\n[bold]Fact-checking with {config.provider.capitalize()} ({config.intensity})...[/bold]")
-        claims = fact_check(result.text, config)
+        if not claims:
+            console.print("\n[yellow]No factual claims found to check.[/yellow]")
+            return
+            
+        # --- Phase 5: Results Table ---
+        table = Table(box=box.ROUNDED, expand=True, show_lines=True)
+        table.add_column("Verdict", justify="center", style="bold", width=10)
+        table.add_column("Time", justify="center", style="cyan", width=13)
+        table.add_column("Claim & Fact-Check", justify="left")
+        
+        no_cap_count = 0
+        cap_count = 0
+        yappin_count = 0
         
         for c in claims:
-            color = "green" if c.verdict == "NO CAP" else "red" if c.verdict == "CAP" else "yellow"
-            console.print(f"\n[{color}][{c.verdict}][/{color}] {c.time_start} - {c.time_end} | {c.claim}")
-            console.print(f"  [dim]-> {c.correction}[/dim]")
-            console.print(f"  [cyan]Source: {c.source}[/cyan]")
+            if c.verdict == "NO CAP":
+                verdict_badge = "[bold green]🟢 NO CAP[/bold green]"
+                no_cap_count += 1
+            elif c.verdict == "CAP":
+                verdict_badge = "[bold red]🔴 CAP![/bold red]"
+                cap_count += 1
+            else:
+                verdict_badge = "[bold yellow]🟡 YAPPIN[/bold yellow]"
+                yappin_count += 1
+                
+            claim_text = (
+                f"[bold white]{c.claim}[/bold white]\n"
+                f"[dim]→ {c.correction}[/dim]\n"
+                f"[blue][link={c.source}]Source[/link][/blue]: {c.source}"
+            )
+            
+            table.add_row(verdict_badge, f"{c.time_start} - {c.time_end}", claim_text)
+            
+        console.print("\n")
+        console.print(table)
+        
+        # --- Phase 5: Summary Footer ---
+        total = len(claims)
+        summary_text = (
+            f"Total Claims Analyzed: [bold]{total}[/bold]\n"
+            f"🟢 NO CAP: {no_cap_count} ({int((no_cap_count/total)*100)}%)\n"
+            f"🔴 CAP!:   {cap_count} ({int((cap_count/total)*100)}%)\n"
+            f"🟡 YAPPIN: {yappin_count} ({int((yappin_count/total)*100)}%)"
+        )
+        console.print(Panel(summary_text, title="[bold magenta]Summary[/bold magenta]", border_style="magenta", expand=False))
         
     except Exception as e:
         console.print(f"[bold red]Error extracting video:[/bold red] {str(e)}")
