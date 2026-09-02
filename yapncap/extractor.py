@@ -47,7 +47,8 @@ def get_transcript(url: str, preferred_lang: str) -> TranscriptResult:
         
     # 2. Fetch CC Transcript
     try:
-        transcript_list = YouTubeTranscriptApi.list_transcripts(video_id)  # type: ignore
+        ytt_api = YouTubeTranscriptApi()
+        transcript_list = ytt_api.list(video_id)  # type: ignore
         try:
             transcript = transcript_list.find_transcript([preferred_lang])
         except Exception:
@@ -58,8 +59,15 @@ def get_transcript(url: str, preferred_lang: str) -> TranscriptResult:
             
         transcript_data = transcript.fetch()
         
-        # Build text string (just raw text for now; timestamps will be used by engine later)
-        text = "\n".join([item['text'] for item in transcript_data])
+        # Build text string with timestamps so the AI engine can extract them
+        formatted_lines = []
+        for item in transcript_data:
+            start_str = format_duration(int(item.start))
+            end_str = format_duration(int(item.start + item.duration))
+            clean_text = item.text.replace("\n", " ")
+            formatted_lines.append(f"[{start_str} - {end_str}] {clean_text}")
+            
+        text = "\n".join(formatted_lines)
         
         source = "cc"
         language = transcript.language_code

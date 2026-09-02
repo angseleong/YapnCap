@@ -52,7 +52,7 @@ def _fact_check_gemini(text: str, config: YapnCapConfig) -> list[ClaimResult]:
     prompt = _get_system_prompt(config.intensity)
     
     response = client.models.generate_content(
-        model='gemini-2.5-flash',
+        model='gemini-3.8-flash',
         contents=f"{prompt}\n\nTranscript:\n{text}",
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
@@ -96,7 +96,7 @@ def _fact_check_groq(text: str, config: YapnCapConfig) -> list[ClaimResult]:
     prompt = _get_system_prompt(config.intensity)
     
     response = client.chat.completions.create(
-        model="llama3-70b-8192",
+        model="groq/compound",
         messages=[
             {"role": "system", "content": f"{prompt}\n\nRespond ONLY with valid JSON matching this schema:\n{{'claims': [{{'claim':'...','verdict':'NO CAP|CAP|YAPPIN','correction':'...','source':'...','time_start':'...','time_end':'...'}}]}}"},
             {"role": "user", "content": f"Transcript:\n{text}"}
