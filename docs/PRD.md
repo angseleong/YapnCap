@@ -11,9 +11,9 @@
 YapnCap is a **Python CLI tool for automated fact-checking** of YouTube videos, podcasts, and audio content. It extracts spoken claims from media sources and cross-references them against real-world data using Large Language Models (LLMs) with Search Grounding capabilities.
 
 The tool provides instant, terminal-based fact-check reports with a distinctive, Gen-Z-friendly classification system:
-- 🟢 **[NO CAP]** — Verified / True
-- 🔴 **[CAP!]** — False / Hoax
-- 🟡 **[YAPPIN!]** — Misleading / Needs Context
+- 🟢 **[FACT]** — Verified / True
+- 🔴 **[HOAX]** — False / Hoax
+- 🟡 **[YAPPING]** — Misleading / Needs Context
 
 **Tagline:** *Detect if they are just yappin' and cappin' in real-time.*
 
@@ -99,9 +99,9 @@ The core intelligence layer. Takes transcript text and:
 3. **Verifies each claim** — uses LLM with Search Grounding (web search) to cross-reference against current data.
 4. **Provides correction & source** — returns the actual truth/clarification backed by a trusted, reputable source.
 5. **Classifies results:**
-   - 🟢 **[NO CAP]** — Claim is factually accurate.
-   - 🔴 **[CAP!]** — Claim is false or fabricated.
-   - 🟡 **[YAPPIN!]** — Claim is misleading, exaggerated, or lacks critical context.
+   - 🟢 **[FACT]** — Claim is factually accurate.
+   - 🔴 **[HOAX]** — Claim is false or fabricated.
+   - 🟡 **[YAPPING]** — Claim is misleading, exaggerated, or lacks critical context.
 6. **Adjusts depth** based on intensity setting (Lenient / Balanced / Strict).
 
 ### F5 — Rich Terminal Output
@@ -111,7 +111,7 @@ Beautiful, readable terminal output using the `rich` library:
 - Color-coded result table with status badges.
 - Exact timestamps for when the claim was made in the video.
 - Clear corrections and trusted source citations for each verification.
-- Summary statistics (total claims, % NO CAP, % CAP, % YAPPIN).
+- Summary statistics (total claims, % FACT, % HOAX, % YAPPING).
 
 ### F6 — Export
 
@@ -200,9 +200,9 @@ Save fact-check results to file:
 
 | Term | Definition |
 |---|---|
-| **CAP** | Slang for lying or exaggerating. In YapnCap: a claim classified as false. |
-| **YAPPIN** | Slang for talking without substance. In YapnCap: a claim that is misleading or lacks context. |
-| **NO CAP** | Slang for "no lie" / telling the truth. In YapnCap: a verified factual claim. |
+| **HOAX** | A claim classified as false. |
+| **YAPPING** | A claim that is misleading or lacks context. |
+| **FACT** | A verified factual claim. |
 | **Search Grounding** | An LLM capability that allows the model to search the web in real-time to verify or supplement its answers with current information. |
 | **BYOK** | Bring Your Own Key — users supply their own API credentials. |
 | **CC** | Closed Captions — subtitles embedded in YouTube videos, either manually added or auto-generated. |

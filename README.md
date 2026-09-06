@@ -17,9 +17,9 @@ $ yapncap https://youtube.com/watch?v=example
 
  # │ Time          │ Claim                        │ Verdict    │ Correction & Source
  ──┼───────────────┼──────────────────────────────┼────────────┼───────────────────────────────────────
- 1 │ 01:12 - 01:18 │ "GDP grew 5% last quarter"   │ 🟢 NO CAP │ True. Q3 GDP was 5.01% (Source: BPS)
- 2 │ 03:45 - 03:52 │ "Unemployment is at 2%"      │ 🔴 CAP!   │ False. Rate is 5.3% (Source: World Bank)
- 3 │ 10:05 - 10:20 │ "We built 1000 schools"      │ 🟡 YAPPIN │ Misleading. 600 were just renovations. (Source: Kemdikbud)
+ 1 │ 01:12 - 01:18 │ "GDP grew 5% last quarter"   │ 🟢 FACT    │ True. Q3 GDP was 5.01% (Source: BPS)
+ 2 │ 03:45 - 03:52 │ "Unemployment is at 2%"      │ 🔴 HOAX    │ False. Rate is 5.3% (Source: World Bank)
+ 3 │ 10:05 - 10:20 │ "We built 1000 schools"      │ 🟡 YAPPING │ Misleading. 600 were just renovations. (Source: Kemdikbud)
 
  Summary: 3 claims checked — 1 verified, 1 false, 1 misleading
 ```
@@ -28,9 +28,9 @@ $ yapncap https://youtube.com/watch?v=example
 
 ## 🎯 What It Does
 
-- **🟢 [NO CAP]** — Claim is factually accurate
-- **🔴 [CAP!]** — Claim is false or fabricated
-- **🟡 [YAPPIN!]** — Claim is misleading or needs context
+- **🟢 [FACT]** — Claim is factually accurate
+- **🔴 [HOAX]** — Claim is false or fabricated
+- **🟡 [YAPPING]** — Claim is misleading or needs context
 
 ---
 

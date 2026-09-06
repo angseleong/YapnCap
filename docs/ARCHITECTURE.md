@@ -46,14 +46,14 @@ There is no server, no database, and no background process. Each invocation is a
                  ▼
 ┌─────────────────────────────┐
 │   Fact-Check Engine         │  ← google-genai / openai / groq
-│   (Anti-Cap Engine)         │
+│       Engine                │
 │                             │
 │   1. Filter opinions        │
 │   2. Extract factual claims │
 │   3. Verify via LLM +      │
 │      Search Grounding       │
-│   4. Classify: NO CAP /     │
-│      CAP / YAPPIN           │
+│   4. Classify: FACT /       │
+│      HOAX / YAPPING         │
 └──────────┬──────────────────┘
            │  structured results (JSON)
            ▼
@@ -185,7 +185,7 @@ def fact_check(text: str, intensity: str, language: str) -> list[ClaimResult]:
 @dataclass
 class ClaimResult:
     claim: str            # The original claim from the transcript
-    verdict: str          # "NO CAP" | "CAP" | "YAPPIN"
+    verdict: str          # "FACT" | "HOAX" | "YAPPING"
     correction: str       # The actual truth / clarification
     source: str           # Trusted, reputable source URL or reference supporting the verdict
     time_start: str       # Start timestamp in the video (e.g., "12:34")

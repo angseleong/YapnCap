@@ -70,12 +70,12 @@ def check(
         console.print("[bold red]Error: Missing API key.[/bold red]")
         console.print("Please run [bold cyan]yapncap setup[/bold cyan] first, or set the appropriate environment variable (e.g. GEMINI_API_KEY).")
         sys.exit(1)
-        
-    console.print(f"Extracting transcript from [bold cyan]{url}[/bold cyan]...")
     try:
-        result = get_transcript(url, config.language)
-        
-        # --- Phase 5: Header Panel ---
+        # --- Phase 5: Header Panel (Wait, metadata needs to be fetched first, but get_transcript does both) ---
+        # Actually, since get_transcript does both and could take a while for STT, we'll wrap it in a spinner.
+        with Status(f"[bold cyan]Extracting CC or transcribing audio from {url}...[/bold cyan]", spinner="dots"):
+            result = get_transcript(url, config)
+            
         metadata_text = (
             f"[bold]Title:[/bold]    {result.title}\n"
             f"[bold]Channel:[/bold]  {result.channel}\n"
@@ -98,20 +98,21 @@ def check(
         table.add_column("Time", justify="center", style="cyan", width=13)
         table.add_column("Claim & Fact-Check", justify="left")
         
-        no_cap_count = 0
-        cap_count = 0
-        yappin_count = 0
+        fact_count = 0
+        hoax_count = 0
+        yapping_count = 0
         
         for c in claims:
-            if c.verdict == "NO CAP":
-                verdict_badge = "[bold green]🟢 NO CAP[/bold green]"
-                no_cap_count += 1
-            elif c.verdict == "CAP":
-                verdict_badge = "[bold red]🔴 CAP![/bold red]"
-                cap_count += 1
+            verdict_norm = c.verdict.upper().strip()
+            if verdict_norm in ["FACT", "NO CAP"]:
+                verdict_badge = "[bold green]🟢 FACT[/bold green]"
+                fact_count += 1
+            elif verdict_norm in ["HOAX", "CAP", "CAP!"]:
+                verdict_badge = "[bold red]🔴 HOAX[/bold red]"
+                hoax_count += 1
             else:
-                verdict_badge = "[bold yellow]🟡 YAPPIN[/bold yellow]"
-                yappin_count += 1
+                verdict_badge = "[bold yellow]🟡 YAPPING[/bold yellow]"
+                yapping_count += 1
                 
             claim_text = (
                 f"[bold white]{c.claim}[/bold white]\n"
@@ -128,9 +129,9 @@ def check(
         total = len(claims)
         summary_text = (
             f"Total Claims Analyzed: [bold]{total}[/bold]\n"
-            f"🟢 NO CAP: {no_cap_count} ({int((no_cap_count/total)*100)}%)\n"
-            f"🔴 CAP!:   {cap_count} ({int((cap_count/total)*100)}%)\n"
-            f"🟡 YAPPIN: {yappin_count} ({int((yappin_count/total)*100)}%)"
+            f"🟢 FACT:    {fact_count} ({int((fact_count/total)*100)}%)\n"
+            f"🔴 HOAX:    {hoax_count} ({int((hoax_count/total)*100)}%)\n"
+            f"🟡 YAPPING: {yapping_count} ({int((yapping_count/total)*100)}%)"
         )
         console.print(Panel(summary_text, title="[bold magenta]Summary[/bold magenta]", border_style="magenta", expand=False))
         

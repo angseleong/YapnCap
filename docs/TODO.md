@@ -55,11 +55,11 @@ Use this file as the primary work guide. **Do not start the next phase before th
 
 ## Phase 3 — Media Downloader & STT Fallback
 
-- [ ] Implement audio-only download via `yt-dlp` (smallest format, temp file)
-- [ ] Implement STT transcription (Gemini / OpenAI Whisper API / Groq Whisper)
-- [ ] Wire fallback: if CC extraction fails → download audio → transcribe → return text
-- [ ] Clean up temp audio files after transcription
-- [ ] Test: run with a YouTube URL without CC — audio is downloaded, transcribed, and text returned
+- [x] Implement audio-only download via `yt-dlp` (smallest format, temp file)
+- [x] Implement STT transcription (Gemini / OpenAI Whisper API / Groq Whisper)
+- [x] Wire fallback: if CC extraction fails → download audio → transcribe → return text
+- [x] Clean up temp audio files after transcription
+- [x] Test: run with a YouTube URL without CC — audio is downloaded, transcribed, and text returned
 
 **Checkpoint Phase 3:** `yapncap <youtube-url-without-cc>` successfully downloads audio, transcribes it, and returns transcript text.
 
@@ -82,7 +82,7 @@ Use this file as the primary work guide. **Do not start the next phase before th
 - [x] Return `list[ClaimResult]` with structured data
 - [x] Test: send sample transcript text → receive structured fact-check results from each provider
 
-**Checkpoint Phase 4:** Running `yapncap <url>` with each provider returns a `list[ClaimResult]` with valid verdicts (NO CAP / CAP / YAPPIN) and explanations.
+**Checkpoint Phase 4:** Running `yapncap <url>` with each provider returns a `list[ClaimResult]` with valid verdicts (FACT / HOAX / YAPPING) and explanations.
 
 ---
 
@@ -91,9 +91,9 @@ Use this file as the primary work guide. **Do not start the next phase before th
 - [x] Implement header panel (video title, channel, URL, duration, transcript source)
 - [x] Implement animated progress bar during AI processing
 - [x] Implement result table with color-coded verdict badges:
-  - [x] 🟢 `[NO CAP]` — green
-  - [x] 🔴 `[CAP!]` — red
-  - [x] 🟡 `[YAPPIN!]` — yellow
+  - [x] 🟢 `[FACT]` — green
+  - [x] 🔴 `[HOAX]` — red
+  - [x] 🟡 `[YAPPING]` — yellow
 - [x] Implement summary footer (total claims, % breakdown by verdict)
 - [x] Test: full pipeline produces beautiful, readable terminal output
 

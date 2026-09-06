@@ -14,7 +14,7 @@ class ClaimResult:
 
 class ClaimResultSchema(BaseModel):
     claim: str = Field(description="The original claim extracted from the transcript")
-    verdict: str = Field(description="Must be exactly one of: NO CAP, CAP, YAPPIN")
+    verdict: str = Field(description="Must be exactly one of: FACT, HOAX, YAPPING")
     correction: str = Field(description="The actual truth or clarification")
     source: str = Field(description="Trusted, reputable source URL or reference supporting the verdict")
     time_start: str = Field(description="Start timestamp in the video where the claim was made (e.g., '12:34')")
@@ -37,9 +37,9 @@ Instructions:
 1. Ignore subjective opinions, greetings, and filler.
 2. {depth_rule}
 3. For each claim, determine the verdict:
-   - "NO CAP": The claim is factually accurate.
-   - "CAP": The claim is false or fabricated.
-   - "YAPPIN": The claim is misleading, exaggerated, or lacks critical context.
+   - "FACT": The claim is factually accurate.
+   - "HOAX": The claim is false or fabricated.
+   - "YAPPING": The claim is misleading, exaggerated, or lacks critical context.
 4. Provide a factual correction/clarification.
 5. Provide a trusted, reputable source backing your correction.
 """
@@ -52,7 +52,7 @@ def _fact_check_gemini(text: str, config: YapnCapConfig) -> list[ClaimResult]:
     prompt = _get_system_prompt(config.intensity)
     
     response = client.models.generate_content(
-        model='gemini-3.8-flash',
+        model='gemini-2.5-flash',
         contents=f"{prompt}\n\nTranscript:\n{text}",
         config=types.GenerateContentConfig(
             response_mime_type="application/json",
@@ -98,7 +98,7 @@ def _fact_check_groq(text: str, config: YapnCapConfig) -> list[ClaimResult]:
     response = client.chat.completions.create(
         model="groq/compound",
         messages=[
-            {"role": "system", "content": f"{prompt}\n\nRespond ONLY with valid JSON matching this schema:\n{{'claims': [{{'claim':'...','verdict':'NO CAP|CAP|YAPPIN','correction':'...','source':'...','time_start':'...','time_end':'...'}}]}}"},
+            {"role": "system", "content": f"{prompt}\n\nRespond ONLY with valid JSON matching this schema:\n{{'claims': [{{'claim':'...','verdict':'FACT|HOAX|YAPPING','correction':'...','source':'...','time_start':'...','time_end':'...'}}]}}"},
             {"role": "user", "content": f"Transcript:\n{text}"}
         ],
         response_format={"type": "json_object"},
