@@ -10,8 +10,19 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
 authors = [
-    { name = "Axeleon" }
+    { name = "Axeleon", email = "axeleon@example.com" }
 ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+keywords = ["youtube", "fact-check", "ai", "llm", "cli"]
+
+[project.urls]
+Homepage = "https://github.com/angseleong/YapnCap"
+Repository = "https://github.com/angseleong/YapnCap"
+"Bug Tracker" = "https://github.com/angseleong/YapnCap/issues"
 dependencies = [
     "typer>=0.12.0",
     "rich>=13.7.0",

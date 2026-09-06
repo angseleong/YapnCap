@@ -103,15 +103,15 @@ Use this file as the primary work guide. **Do not start the next phase before th
 
 ## Phase 6 — Export & Polish
 
-- [ ] Implement Markdown export (`--export md`)
-  - [ ] Include header, table, and summary in `.md` format
-  - [ ] Auto-generate filename based on video title and date
-- [ ] Implement JSON export (`--export json`)
-  - [ ] Output array of `ClaimResult` objects
-  - [ ] Pretty-printed with 2-space indentation
-- [ ] Final `README.md` polish — installation, usage examples, screenshots
-- [ ] Ensure `pyproject.toml` is PyPI-ready (metadata, classifiers, license)
-- [ ] Test: exports produce valid, well-formatted files
+- [x] Implement Markdown export (`--export md`)
+  - [x] Include header, table, and summary in `.md` format
+  - [x] Auto-generate filename based on video title and date
+- [x] Implement JSON export (`--export json`)
+  - [x] Output array of `ClaimResult` objects
+  - [x] Pretty-printed with 2-space indentation
+- [x] Final `README.md` polish — installation, usage examples, screenshots
+- [x] Ensure `pyproject.toml` is PyPI-ready (metadata, classifiers, license)
+- [x] Test: exports produce valid, well-formatted files
 
 **Checkpoint Phase 6:** Running `yapncap --export md <url>` and `yapncap --export json <url>` both produce correct output files. `README.md` is complete. Package is ready for `pip install`.
 

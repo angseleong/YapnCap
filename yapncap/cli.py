@@ -10,6 +10,9 @@ from yapncap.config import YapnCapConfig, load_config, save_config, validate_con
 from yapncap.extractor import get_transcript
 from yapncap.engine import fact_check
 import sys
+import json
+import re
+from datetime import datetime
 
 app = typer.Typer(help="YapnCap 🧢 — Detect if they are just yappin' and cappin' in real-time.")
 console = Console()
@@ -135,6 +138,66 @@ def check(
         )
         console.print(Panel(summary_text, title="[bold magenta]Summary[/bold magenta]", border_style="magenta", expand=False))
         
+        # --- Phase 6: Export ---
+        if export_format:
+            # Generate safe filename
+            safe_title = re.sub(r'[^a-zA-Z0-9_\-]', '_', result.title.replace(' ', '_'))
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            ext = export_format.lower()
+            filename = f"yapncap_{safe_title}_{timestamp}.{ext}"
+            
+            if ext == "json":
+                export_data = {
+                    "video": {
+                        "title": result.title,
+                        "channel": result.channel,
+                        "url": result.url,
+                        "duration": result.duration,
+                        "source": result.source,
+                    },
+                    "summary": {
+                        "total": total,
+                        "fact": fact_count,
+                        "hoax": hoax_count,
+                        "yapping": yapping_count
+                    },
+                    "claims": [__import__("dataclasses").asdict(c) for c in claims]
+                }
+                with open(filename, "w", encoding="utf-8") as f:
+                    json.dump(export_data, f, indent=2, ensure_ascii=False)
+                console.print(f"\n[bold green]✓ Exported JSON to:[/bold green] {filename}")
+                
+            elif ext == "md":
+                md_lines = [
+                    f"# YapnCap Report: {result.title}",
+                    "",
+                    f"**Channel:** {result.channel}  ",
+                    f"**URL:** {result.url}  ",
+                    f"**Duration:** {result.duration}  ",
+                    f"**Transcript Source:** {result.source.upper()}  ",
+                    "",
+                    "## Summary",
+                    f"- Total Claims: **{total}**",
+                    f"- 🟢 **FACT:** {fact_count}",
+                    f"- 🔴 **HOAX:** {hoax_count}",
+                    f"- 🟡 **YAPPING:** {yapping_count}",
+                    "",
+                    "## Detailed Claims",
+                    ""
+                ]
+                
+                for c in claims:
+                    md_lines.append(f"### [{c.verdict.upper()}] {c.time_start} - {c.time_end}")
+                    md_lines.append(f"**Claim:** {c.claim}")
+                    md_lines.append(f"**Explanation:** {c.correction}")
+                    md_lines.append(f"**Source:** [Link]({c.source})")
+                    md_lines.append("")
+                
+                with open(filename, "w", encoding="utf-8") as f:
+                    f.write("\n".join(md_lines))
+                console.print(f"\n[bold green]✓ Exported Markdown to:[/bold green] {filename}")
+            else:
+                console.print(f"\n[bold red]Unsupported export format: {ext}[/bold red]")
     except Exception as e:
         console.print(f"[bold red]Error extracting video:[/bold red] {str(e)}")
         sys.exit(1)
